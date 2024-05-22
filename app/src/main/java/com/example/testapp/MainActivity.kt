@@ -1,28 +1,14 @@
-/**
- *
- * Copyright 2019-2024 Bharath Vishal G.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- **/
-
 package com.example.testapp
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Notification
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.service.notification.StatusBarNotification
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -33,6 +19,11 @@ import com.google.android.gms.wearable.*
 import kotlinx.coroutines.*
 import java.nio.charset.StandardCharsets
 import java.util.*
+
+import android.app.NotificationManager
+import android.content.ComponentName
+import android.os.Build
+import androidx.core.app.NotificationManagerCompat
 
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     DataClient.OnDataChangedListener,
@@ -62,6 +53,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        if(!isNotificationPermissionGranted()){
+            startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+        }
+
 
         activityContext = this
         wearableDeviceConnected = false
@@ -120,6 +116,16 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
 //                }
 //            }
         }
+
+    private fun isNotificationPermissionGranted() : Boolean{
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1){
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            return notificationManager.isNotificationListenerAccessGranted(ComponentName(application,MyNotificationListenerService::class.java))
+        }
+        else{
+            return NotificationManagerCompat.getEnabledListenerPackages(applicationContext).contains(applicationContext.packageName)
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     private fun initialiseDevicePairing(tempAct: Activity) {
@@ -267,6 +273,32 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     //  Wear에서 받은 메시지를 띄우는 부분
     @SuppressLint("SetTextI18n")
     override fun onMessageReceived(p0: MessageEvent) {
+        if (p0.path == MESSAGE_ITEM_RECEIVED_PATH){
+            val message = String(p0.data)
+            Log.d("WearMessageListner", "Received message : $message")
+
+            val notificationListenerService = MyNotificationListenerService()
+            val notifications : Array<StatusBarNotification> = notificationListenerService.activeNotifications
+
+            for (sbn in notifications){
+
+                val wExt = Notification.WearableExtender(sbn.notification)
+                val act = wExt.actions.firstOrNull() {
+                        action -> action.remoteInputs != null && action.remoteInputs.isNotEmpty() &&
+                        (action.title.toString().contains("reply", true) || action.title.toString().contains("답장", true))
+                }
+                if (act != null){
+                    notificationListenerService.callResponder(
+                        sbn.notification.extras?.getString("android.title"),
+                        sbn.notification.extras?.get("android.text"),
+                        act,
+                        message
+                    )
+                    break
+                }
+            }
+
+        }
         try {
             val s =
                 String(p0.data, StandardCharsets.UTF_8)
