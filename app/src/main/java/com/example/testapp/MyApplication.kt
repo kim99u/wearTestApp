@@ -16,7 +16,7 @@
  *
  **/
 
-package com.bharathvishal.testapp
+package com.example.testapp
 
 import android.app.Application
 import com.google.android.material.color.DynamicColors

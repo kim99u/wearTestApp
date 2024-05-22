@@ -16,7 +16,7 @@
  *
  **/
 
-package com.bharathvishal.testapp
+package com.example.testapp
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -27,7 +27,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bharathvishal.testapp.databinding.ActivityMainBinding
+import com.example.testapp.databinding.ActivityMainBinding
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.*
 import kotlinx.coroutines.*
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         activityContext = this
         wearableDeviceConnected = false
 
-
+//      안드로이드에서 Wear가 연결되어 있는지 확인하고 띄워주는 기능
         binding.checkwearablesButton.setOnClickListener {
             if (!wearableDeviceConnected) {
                 val tempAct: Activity = activityContext as MainActivity
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
         }
 
 
-
+//        안드로이드상에서 메시지를 보내는 기능
 //        binding.sendmessageButton.setOnClickListener {
 //            if (wearableDeviceConnected) {
 //                if (binding.messagecontentEditText.text!!.isNotEmpty()) {
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
                 e.printStackTrace()
             }
 
-            //UI Thread
+            //  페어링 상태에 대한 알림 플로팅을 띄우는 기능
             withContext(Dispatchers.Main) {
                 if (getNodesResBool!![0]) {
                     //if message Acknowlegement Received
@@ -178,6 +178,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     }
 
 
+//  연결된 Wear의 노드를 가져오는 부분
     private fun getNodes(context: Context): BooleanArray {
         val nodeResults = HashSet<String>()
         val resBool = BooleanArray(2)
@@ -263,6 +264,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope(),
     override fun onDataChanged(p0: DataEventBuffer) {
     }
 
+    //  Wear에서 받은 메시지를 띄우는 부분
     @SuppressLint("SetTextI18n")
     override fun onMessageReceived(p0: MessageEvent) {
         try {

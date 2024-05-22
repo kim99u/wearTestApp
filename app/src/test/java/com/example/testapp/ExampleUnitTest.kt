@@ -1,4 +1,4 @@
-package com.bharathvishal.testapp
+package com.example.testapp
 
 import org.junit.Test
 

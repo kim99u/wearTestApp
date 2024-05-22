@@ -16,7 +16,7 @@
  *
  **/
 
-package com.bharathvishal.testapp
+package com.example.testapp
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -29,7 +29,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.wear.ambient.AmbientModeSupport
 import androidx.wear.ambient.AmbientModeSupport.AmbientCallback
-import com.bharathvishal.testapp.databinding.ActivityMainBinding
+import com.example.testapp.databinding.ActivityMainBinding
 import com.google.android.gms.wearable.*
 import java.nio.charset.StandardCharsets
 
@@ -143,6 +143,8 @@ class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCallbackProv
                         + s1
             )
 
+            //  연결된 안드로이드의 노드를 가져오는 부분
+            // sendMessageTask : 타이핑한 메시지를 안드로이드로 전송
             //Send back a message back to the source node
             //This acknowledges that the receiver activity is open
             if (messageEventPath.isNotEmpty() && messageEventPath == APP_OPEN_WEARABLE_PAYLOAD_PATH) {
@@ -192,30 +194,30 @@ class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCallbackProv
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-            }//emd of if
-            else if (messageEventPath.isNotEmpty() && messageEventPath == MESSAGE_ITEM_RECEIVED_PATH) {
-                try {
-                    binding.messagelogTextView.visibility = View.VISIBLE
-                    binding.textInputLayout.visibility = View.VISIBLE
-                    binding.sendmessageButton.visibility = View.VISIBLE
-                    binding.deviceconnectionStatusTv.visibility = View.GONE
-
-                    val sbTemp = StringBuilder()
-                    sbTemp.append("\n")
-                    sbTemp.append(s1)
-                    sbTemp.append(" - (Received from mobile)")
-                    Log.d("receive1", " $sbTemp")
-                    binding.messagelogTextView.append(sbTemp)
-
-
-                    binding.scrollviewTextMessageLog.requestFocus()
-                    binding.scrollviewTextMessageLog.post {
-                        binding.scrollviewTextMessageLog.fullScroll(ScrollView.FOCUS_DOWN)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+            }//end of if
+//            else if (messageEventPath.isNotEmpty() && messageEventPath == MESSAGE_ITEM_RECEIVED_PATH) {
+//                try {
+//                    binding.messagelogTextView.visibility = View.VISIBLE
+//                    binding.textInputLayout.visibility = View.VISIBLE
+//                    binding.sendmessageButton.visibility = View.VISIBLE
+//                    binding.deviceconnectionStatusTv.visibility = View.GONE
+//
+//                    val sbTemp = StringBuilder()
+//                    sbTemp.append("\n")
+//                    sbTemp.append(s1)
+//                    sbTemp.append(" - (Received from mobile)")
+//                    Log.d("receive1", " $sbTemp")
+//                    binding.messagelogTextView.append(sbTemp)
+//
+//
+//                    binding.scrollviewTextMessageLog.requestFocus()
+//                    binding.scrollviewTextMessageLog.post {
+//                        binding.scrollviewTextMessageLog.fullScroll(ScrollView.FOCUS_DOWN)
+//                    }
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
