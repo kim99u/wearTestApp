@@ -1,21 +1,3 @@
-/**
- *
- * Copyright 2019-2024 Bharath Vishal G.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- **/
-
 package com.example.testapp
 
 import android.annotation.SuppressLint
@@ -36,7 +18,8 @@ import java.nio.charset.StandardCharsets
 class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCallbackProvider,
     DataClient.OnDataChangedListener,
     MessageClient.OnMessageReceivedListener,
-    CapabilityClient.OnCapabilityChangedListener {
+    CapabilityClient.OnCapabilityChangedListener
+    {
     private var activityContext: Context? = null
 
     private lateinit var binding: ActivityMainBinding
@@ -57,6 +40,7 @@ class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCallbackProv
     private var mobileNodeUri: String? = null
 
     private lateinit var ambientController: AmbientModeSupport.AmbientController
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -199,7 +183,7 @@ class MainActivity : AppCompatActivity(), AmbientModeSupport.AmbientCallbackProv
 //                try {
 //                    binding.messagelogTextView.visibility = View.VISIBLE
 //                    binding.textInputLayout.visibility = View.VISIBLE
-//                    binding.sendmessageButton.visibility = View.VISIBLE
+//                    binding.Button.visibility = View.VISIBLE
 //                    binding.deviceconnectionStatusTv.visibility = View.GONE
 //
 //                    val sbTemp = StringBuilder()

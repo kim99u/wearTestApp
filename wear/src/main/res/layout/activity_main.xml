@@ -45,6 +45,12 @@
                     android:orientation="vertical"
                     android:padding="1dp">
 
+                    <Button
+                        android:id="@+id/button2"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dp"
+                        android:text="Button" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
